@@ -49,10 +49,12 @@ const getDiceCoordinates = function (
 };
 
 const App = () => {
+  const [startTime, setStartTime] = useState("");
   const [diceLeft, setDiceLeft] = useState(5);
   const [roll, setRoll] = useState(0);
   const [coordinates, setCoordinates] = useState<[number, number][]>([]);
   const [showFaces, setShowFaces] = useState(false);
+  const [round, setRound] = useState(1);
 
   useEffect(() => {
     setCoordinates(getDiceCoordinates(diceLeft, diceLeft === 5 ? 115 : 80));
@@ -68,9 +70,13 @@ const App = () => {
   }, []);
 
   const handleRoll = useCallback(() => {
+    if (round === 1 && roll === 0) {
+      setStartTime(new Date().toLocaleTimeString());
+    }
+
     setRoll(roll + 1);
     setShowFaces(true);
-  }, [roll]);
+  }, [roll, round]);
 
   const handleDecrement = useCallback(() => {
     if (diceLeft > 0) {
@@ -87,14 +93,15 @@ const App = () => {
   }, [diceLeft]);
 
   const handleReset = useCallback(() => {
+    setRound(round + 1);
+    setRoll(0);
     setDiceLeft(5);
     setShowFaces(false);
-  }, []);
+  }, [round]);
 
   const canRoll = diceLeft > 0;
   const canIncrement = diceLeft < 5 && diceLeft !== 0;
   const canDecrement = diceLeft > 0;
-  const canReset = diceLeft < 5;
 
   return (
     <HelmetProvider>
@@ -106,12 +113,25 @@ const App = () => {
         />
         <meta
           name="keywords"
-          content="play polliwop mobile phone online browser perudo"
+          content="play polliwop mobile phone online browser perudo dice game"
         />
         <meta name="author" content="Floris de Haan" />
+        <meta property="og:image" content="./polliwop.webp" />
+        <meta property="og:image:alt" content="Polliwop" />
         <link rel="canonical" href="https://solidesoftware.nl/polliwop/" />
+        <link rel="icon" href="./polliwop.ico" />
       </Helmet>
       <div className="App">
+        <h1 className="title">Let's play Polliwop!</h1>
+        <div className="stats-wrapper">
+          {(roll > 0 || round > 1) && (
+            <div className="stats">
+              <div>Started at {startTime}</div>
+              <div>Round {round}</div>
+              {roll > 0 && <div>Roll {roll}</div>}
+            </div>
+          )}
+        </div>
         <div className="main">
           {diceLeft === 0 && <div className="game-over">Game over!</div>}
           <div className="dice-container">
@@ -139,9 +159,7 @@ const App = () => {
               <button onClick={handleIncrement} disabled={!canIncrement}>
                 +
               </button>
-              <button onClick={handleReset} disabled={!canReset}>
-                Reset
-              </button>
+              <button onClick={handleReset}>Reset</button>
               <button onClick={handleDecrement} disabled={!canDecrement}>
                 -
               </button>

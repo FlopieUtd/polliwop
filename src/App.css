@@ -33,6 +33,28 @@ body {
   align-items: center;
 }
 
+.title {
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  top: -100px;
+}
+
+.stats-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  min-height: 100px;
+
+}
+
+.stats {
+  padding: 12px;
+  width: 100%;
+  max-width: 480px;
+  color: #555;
+}
+
 .dice-container {
   position: relative;
   background: blue;
