@@ -106,23 +106,20 @@ const App = () => {
   return (
     <HelmetProvider>
       <Helmet>
-        <title>Play Polliwop</title>
-        <meta
-          name="description"
-          content="Play Polliwop on your mobile phone!"
-        />
+        <title>Play Perudo</title>
+        <meta name="description" content="Play Perudo on your mobile phone!" />
         <meta
           name="keywords"
-          content="play polliwop mobile phone online browser perudo dice game"
+          content="play perudo mobile phone online browser perudo dice game"
         />
         <meta name="author" content="Floris de Haan" />
-        <meta property="og:image" content="./polliwop.webp" />
-        <meta property="og:image:alt" content="Polliwop" />
-        <link rel="canonical" href="https://solidesoftware.nl/polliwop/" />
-        <link rel="icon" href="./polliwop.ico" />
+        <meta property="og:image" content="./perudo.webp" />
+        <meta property="og:image:alt" content="Perudo" />
+        <link rel="canonical" href="https://solidesoftware.nl/perudo/" />
+        <link rel="icon" href="./perudo.ico" />
       </Helmet>
       <div className="App">
-        <h1 className="title">Let's play Polliwop!</h1>
+        <h1 className="title">Let's play Perudo!</h1>
         <div className="stats-wrapper">
           {(roll > 0 || round > 1) && (
             <div className="stats">

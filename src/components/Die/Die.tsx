@@ -51,8 +51,8 @@ export const Die = ({
       <div id="die-side" className="side one">
         {showFaces && (
           <img
-            src="./polliwop.webp"
-            alt="polliwop"
+            src="./perudo.webp"
+            alt="perudo"
             style={{ width: 70, height: 70 }}
           />
         )}
