@@ -100,9 +100,11 @@ const App = () => {
   const canIncrement = diceLeft < 5 && diceLeft !== 0;
   const canDecrement = diceLeft > 0;
 
+  const isFresh = roll === 0 && round === 1;
+
   return (
     <div className="App">
-      <h1 className="title">Let's play Perudo!</h1>
+      {isFresh && <h1 className="title">Let's play Perudo!</h1>}
       <div className="stats-wrapper">
         {(roll > 0 || round > 1) && (
           <div className="stats">
@@ -131,7 +133,11 @@ const App = () => {
       <div className="controls-wrapper">
         <div className="controls">
           <div className="controls-row">
-            <button onClick={handleRoll} disabled={!canRoll}>
+            <button
+              onClick={handleRoll}
+              disabled={!canRoll}
+              className={isFresh ? "pulse" : ""}
+            >
               Roll
             </button>
           </div>
