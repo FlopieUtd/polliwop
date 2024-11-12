@@ -2,6 +2,18 @@ import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import { Die } from "./components/Die/Die";
 
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void;
+  }
+}
+
+const trackEvent = (eventName: string, eventParams?: Record<string, any>) => {
+  if (window.gtag) {
+    window.gtag("event", eventName, eventParams);
+  }
+};
+
 const getDiceCoordinates = function (
   n: number,
   circleSize: number
@@ -71,9 +83,15 @@ const App = () => {
       setStartTime(new Date().toLocaleTimeString());
     }
 
+    trackEvent("roll_button_clicked", {
+      round,
+      roll,
+      diceLeft,
+    });
+
     setRoll(roll + 1);
     setShowFaces(true);
-  }, [roll, round]);
+  }, [diceLeft, roll, round]);
 
   const handleDecrement = useCallback(() => {
     if (diceLeft > 0) {
