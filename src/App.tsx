@@ -1,13 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import { Die } from "./components/Die/Die";
-
-declare global {
-  interface Window {
-    dataLayer: any[];
-    gtag?: (...args: any[]) => void;
-  }
-}
+import {
+  initializeGoogleAnalytics,
+  trackGoogleAnalyticsEvent,
+} from "./utils/ga4";
 
 const getDiceCoordinates = function (
   n: number,
@@ -60,59 +57,16 @@ const App = () => {
   const [showFaces, setShowFaces] = useState(false);
   const [round, setRound] = useState(1);
 
-  const [isGtagLoaded, setIsGtagLoaded] = useState(false);
-
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://www.googletagmanager.com/gtag/js?id=G-ZXKDHJBK23";
-    script.async = true;
-    script.onload = () => setIsGtagLoaded(true);
-    document.head.appendChild(script);
-
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function () {
-      window.dataLayer.push(arguments);
-    };
-    window.gtag("js", new Date());
-    window.gtag("config", "G-ZXKDHJBK23");
-  }, []);
-
-  const trackEvent = useCallback(
-    (eventName: string, eventParams?: Record<string, any>) => {
-      if (isGtagLoaded && window.gtag) {
-        window.gtag("event", eventName, eventParams);
-      }
-    },
-    [isGtagLoaded]
-  );
-
-  useEffect(() => {
-    setCoordinates(getDiceCoordinates(diceLeft, diceLeft === 5 ? 115 : 80));
-  }, [diceLeft]);
-
-  useEffect(() => {
-    const documentHeight = () => {
-      const doc = document.documentElement;
-      doc.style.setProperty("--doc-height", `${window.innerHeight}px`);
-    };
-    window.addEventListener("resize", documentHeight);
-    documentHeight();
-  }, []);
-
   const handleRoll = useCallback(() => {
     if (round === 1 && roll === 0) {
       setStartTime(new Date().toLocaleTimeString());
     }
 
-    trackEvent("roll_button_clicked", {
-      round,
-      roll,
-      diceLeft,
-    });
+    trackGoogleAnalyticsEvent("action", "roll", "test");
 
     setRoll(roll + 1);
     setShowFaces(true);
-  }, [diceLeft, roll, round, trackEvent]);
+  }, [roll, round]);
 
   const handleDecrement = useCallback(() => {
     if (diceLeft > 0) {
@@ -140,6 +94,23 @@ const App = () => {
   const canDecrement = diceLeft > 0;
 
   const isFresh = roll === 0 && round === 1;
+
+  useEffect(() => {
+    initializeGoogleAnalytics();
+  }, []);
+
+  useEffect(() => {
+    setCoordinates(getDiceCoordinates(diceLeft, diceLeft === 5 ? 115 : 80));
+  }, [diceLeft]);
+
+  useEffect(() => {
+    const documentHeight = () => {
+      const doc = document.documentElement;
+      doc.style.setProperty("--doc-height", `${window.innerHeight}px`);
+    };
+    window.addEventListener("resize", documentHeight);
+    documentHeight();
+  }, []);
 
   return (
     <div className="App">
