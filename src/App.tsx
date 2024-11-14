@@ -4,15 +4,10 @@ import { Die } from "./components/Die/Die";
 
 declare global {
   interface Window {
+    dataLayer: any[];
     gtag?: (...args: any[]) => void;
   }
 }
-
-const trackEvent = (eventName: string, eventParams?: Record<string, any>) => {
-  if (window.gtag) {
-    window.gtag("event", eventName, eventParams);
-  }
-};
 
 const getDiceCoordinates = function (
   n: number,
@@ -65,6 +60,32 @@ const App = () => {
   const [showFaces, setShowFaces] = useState(false);
   const [round, setRound] = useState(1);
 
+  const [isGtagLoaded, setIsGtagLoaded] = useState(false);
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://www.googletagmanager.com/gtag/js?id=G-ZXKDHJBK23";
+    script.async = true;
+    script.onload = () => setIsGtagLoaded(true);
+    document.head.appendChild(script);
+
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () {
+      window.dataLayer.push(arguments);
+    };
+    window.gtag("js", new Date());
+    window.gtag("config", "G-ZXKDHJBK23");
+  }, []);
+
+  const trackEvent = useCallback(
+    (eventName: string, eventParams?: Record<string, any>) => {
+      if (isGtagLoaded && window.gtag) {
+        window.gtag("event", eventName, eventParams);
+      }
+    },
+    [isGtagLoaded]
+  );
+
   useEffect(() => {
     setCoordinates(getDiceCoordinates(diceLeft, diceLeft === 5 ? 115 : 80));
   }, [diceLeft]);
@@ -91,7 +112,7 @@ const App = () => {
 
     setRoll(roll + 1);
     setShowFaces(true);
-  }, [diceLeft, roll, round]);
+  }, [diceLeft, roll, round, trackEvent]);
 
   const handleDecrement = useCallback(() => {
     if (diceLeft > 0) {
