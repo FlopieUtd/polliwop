@@ -60,9 +60,10 @@ const App = () => {
   const handleRoll = useCallback(() => {
     if (round === 1 && roll === 0) {
       setStartTime(new Date().toLocaleTimeString());
+      trackGoogleAnalyticsEvent("action", "start_game", "");
     }
 
-    trackGoogleAnalyticsEvent("action", "roll", "test");
+    trackGoogleAnalyticsEvent("action", "roll", "");
 
     setRoll(roll + 1);
     setShowFaces(true);
@@ -72,6 +73,7 @@ const App = () => {
     if (diceLeft > 0) {
       setDiceLeft(diceLeft - 1);
       setShowFaces(false);
+      trackGoogleAnalyticsEvent("action", "decrement", "");
     }
   }, [diceLeft]);
 
@@ -79,6 +81,7 @@ const App = () => {
     if (diceLeft < 5) {
       setDiceLeft(diceLeft + 1);
       setShowFaces(false);
+      trackGoogleAnalyticsEvent("action", "increment", "");
     }
   }, [diceLeft]);
 
@@ -87,6 +90,7 @@ const App = () => {
     setRoll(0);
     setDiceLeft(5);
     setShowFaces(false);
+    trackGoogleAnalyticsEvent("action", "reset", "");
   }, [round]);
 
   const canRoll = diceLeft > 0;
