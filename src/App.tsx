@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import { Die } from "./components/Die/Die";
-import { Menu } from "./components/Menu/Menu";
 import {
   initializeGoogleAnalytics,
   trackGoogleAnalyticsEvent,
@@ -57,7 +56,6 @@ const App = () => {
   const [coordinates, setCoordinates] = useState<[number, number][]>([]);
   const [showFaces, setShowFaces] = useState(false);
   const [round, setRound] = useState(1);
-  const [isMenuActive, setIsMenuActive] = useState(false);
 
   const handleRoll = useCallback(() => {
     if (round === 1 && roll === 0) {
@@ -120,32 +118,17 @@ const App = () => {
 
   return (
     <>
-      <Menu
-        isActive={isMenuActive}
-        onReturn={() => {
-          setIsMenuActive(false);
-          trackGoogleAnalyticsEvent("action", "close_menu", "");
-        }}
-      />
       <div className="w-full h-full flex flex-col max-w-[480px] relative">
         {isFresh && (
           <h1 className="w-full text-center text-[20px] mt-[24px] absolute font-bold">
-            let's play
+            let's playz
             <br />
             <span className="text-[96px] font-aztec font-normal leading-[84px]">
               perudo
             </span>
           </h1>
         )}
-        <button
-          className="max-w-[36px] min-h-[36px] rounded-full p-0 flex items-center justify-center absolute right-[12px] top-[12px]"
-          onClick={() => {
-            setIsMenuActive(true);
-            trackGoogleAnalyticsEvent("action", "open_menu", "");
-          }}
-        >
-          <span style={{ marginLeft: 3 }}>?</span>
-        </button>
+
         <div className="w-full flex justify-center min-h-[100px]">
           {(roll > 0 || round > 1) && (
             <div className="p-[12px] w-full max-w-[480px] text-[#555] origin-center">
@@ -181,7 +164,7 @@ const App = () => {
               <button
                 onClick={handleRoll}
                 disabled={!canRoll}
-                className={isFresh && !isMenuActive ? "pulse" : ""}
+                className={isFresh ? "pulse" : ""}
               >
                 Roll
               </button>

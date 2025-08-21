@@ -104,7 +104,8 @@ export const Menu = ({ onReturn, isActive }: MenuProps) => {
           <h3 className="text-[20px] mb-[12px] font-bold">Exact Call: Calza</h3>
           <p className="mb-[12px]">
             A player can also declare "<b>Calza</b>" if they believe the bid is{" "}
-            <b>exactly correct</b>. All dice are revealed:
+            <b>exactly correct</b>. Note that Calza can be called by any player
+            at any moment, except after one's own bid. All dice are revealed:
           </p>
           <ul className="mb-[12px] list-disc pl-[20px]">
             <li>
